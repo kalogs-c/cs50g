@@ -4,15 +4,28 @@ Pipe.__index = Pipe
 local PIPE_IMAGE = love.graphics.newImage('assets/images/pipe.png')
 local PIPE_SCROLL = -60
 
-function Pipe.new()
+local PIPE_HEIGHT = PIPE_IMAGE:getHeight();
+local PIPE_WIDTH = PIPE_IMAGE:getWidth();
+
+function Pipe.new(orientation, y)
   local pipe = setmetatable({}, Pipe)
-  return pipe:init()
+  return pipe:init(orientation, y)
 end
 
-function Pipe:init()
+function Pipe.getHeight()
+  return PIPE_HEIGHT
+end
+
+function Pipe.getWidth()
+  return PIPE_WIDTH
+end
+
+function Pipe:init(orientation, y)
   self.x = WINDOW.VIRTUAL.WIDTH
-  self.y = math.random(WINDOW.VIRTUAL.HEIGHT / 2, WINDOW.VIRTUAL.HEIGHT - 50)
-  self.width = PIPE_IMAGE:getWidth()
+  self.y = y
+  self.width = PIPE_WIDTH
+  self.height = PIPE_HEIGHT
+  self.orientation = orientation
 
   return self
 end
@@ -22,9 +35,13 @@ function Pipe:update(dt)
 end
 
 function Pipe:draw()
-  love.graphics.draw(PIPE_IMAGE, self.x, self.y)
-end
+  local y = self.y
+  local spriteOrientation = 1
 
-function Pipe:canDestroy()
-  return self.x < -self.width
+  if self.orientation == "top" then
+    y = self.y + self.height
+    spriteOrientation = -1
+  end
+
+  love.graphics.draw(PIPE_IMAGE, self.x, y, 0, 1, spriteOrientation)
 end

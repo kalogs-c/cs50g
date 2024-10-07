@@ -1,6 +1,7 @@
 require 'conf'
 require 'entities.Bird'
 require 'entities.Pipe'
+require 'entities.PipePair'
 
 local push = require 'vendor.push'
 
@@ -20,7 +21,8 @@ local ground = {
 local bird = Bird.new()
 local pipe_manager = {
   pipes = {},
-  timer = 0
+  timer = 0,
+  previousY = -Pipe.getHeight() + math.random(20, Pipe.getHeight() / 2),
 }
 
 function love.load()
@@ -67,16 +69,27 @@ function love.update(dt)
   ground.scroll = (ground.scroll + ground.scroll_speed * dt) % WINDOW.VIRTUAL.HEIGHT
 
   pipe_manager.timer = pipe_manager.timer + dt
-  if pipe_manager.timer > 2.5 then
-    table.insert(pipe_manager.pipes, Pipe.new())
+  if PipePair.canSpawn(pipe_manager) then
+    local tooHighBaseCase = -Pipe.getHeight() + 40
+    local tooLowBaseCase = WINDOW.VIRTUAL.HEIGHT - PipePair.getGap() - Pipe.getHeight() - 50
+    local targetY = math.min(
+      pipe_manager.previousY + math.random(-50, 50),
+      tooLowBaseCase
+    )
+    local y = math.max(tooHighBaseCase, targetY)
+    pipe_manager.previousY = y
+
+    table.insert(pipe_manager.pipes, PipePair.new(y))
     pipe_manager.timer = 0
   end
 
   bird:update(dt)
-  for k, pipe in pairs(pipe_manager.pipes) do
-    pipe:update(dt)
+  for _, pair in pairs(pipe_manager.pipes) do
+    pair:update(dt)
+  end
 
-    if pipe:canDestroy() then
+  for k, pair in pairs(pipe_manager.pipes) do
+    if pair:canDestroy() then
       table.remove(pipe_manager.pipes, k)
     end
   end
