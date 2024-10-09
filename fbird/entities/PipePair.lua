@@ -37,7 +37,7 @@ function PipePair:draw()
 end
 
 function PipePair.canSpawn(manager)
-  return manager.timer > 1.5
+  return manager.timer > 2.25
 end
 
 function PipePair:canDestroy()

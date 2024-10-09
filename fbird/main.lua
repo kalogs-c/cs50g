@@ -25,6 +25,8 @@ local pipe_manager = {
   previousY = -Pipe.getHeight() + math.random(20, Pipe.getHeight() / 2),
 }
 
+local scrolling = true
+
 function love.load()
   love.graphics.setDefaultFilter('nearest', 'nearest')
   love.window.setTitle(WINDOW.TITLE)
@@ -50,7 +52,7 @@ end
 
 function love.keypressed(key)
     if key == 'escape' then
-        love.event.quit()
+      love.event.quit()
     end
 
     love.keyboard.keysPressed[key] = true
@@ -65,6 +67,10 @@ function love.keyboard.wasPressed(key)
 end
 
 function love.update(dt)
+  if not scrolling then
+    return
+  end
+
   background.scroll = (background.scroll + background.scroll_speed * dt) % background.loopingPoint
   ground.scroll = (ground.scroll + ground.scroll_speed * dt) % WINDOW.VIRTUAL.HEIGHT
 
@@ -86,6 +92,12 @@ function love.update(dt)
   bird:update(dt)
   for _, pair in pairs(pipe_manager.pipes) do
     pair:update(dt)
+
+    for _, pipe in pairs(pair.pipes) do
+      if bird:collides(pipe) then
+        scrolling = false
+      end
+    end
   end
 
   for k, pair in pairs(pipe_manager.pipes) do
@@ -101,10 +113,10 @@ function love.draw()
     push:start()
 
     love.graphics.draw(background.image, -background.scroll, 0)
-    bird:draw()
     for _, pipe in pairs(pipe_manager.pipes) do
       pipe:draw()
     end
+    bird:draw()
     love.graphics.draw(ground.image, -ground.scroll, WINDOW.VIRTUAL.HEIGHT - 16)
 
     push:finish()

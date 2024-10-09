@@ -2,6 +2,7 @@ Bird = {}
 Bird.__index = Bird
 
 local GRAVITY = 10
+local HITBOX_SHRINK_SCALE = 4
 
 function Bird.new()
   local bird = setmetatable({}, Bird)
@@ -31,4 +32,29 @@ end
 
 function Bird:draw()
   love.graphics.draw(self.image, self.x, self.y)
+end
+
+function Bird:collides(pipe)
+  local hitbox = self:getHitbox(HITBOX_SHRINK_SCALE)
+
+  if hitbox.x + hitbox.width > pipe.x and hitbox.x < pipe.x + pipe.width then
+    if pipe.orientation == "top" then
+      return hitbox.y < pipe.y + pipe.height
+    else
+      return hitbox.y + hitbox.height > pipe.y
+    end
+  end
+
+  return false
+end
+
+function Bird:getHitbox(shrink_scale)
+  local hitbox = {
+    x = self.x + shrink_scale,
+    y = self.y + shrink_scale,
+    width = self.width - shrink_scale * 2,
+    height = self.height - shrink_scale * 2,
+  }
+
+  return hitbox
 end
