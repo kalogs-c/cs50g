@@ -14,6 +14,7 @@ function PlayState:init()
 		previousY = -Pipe.getHeight() + math.random(20, Pipe.getHeight() / 2),
 	}
 	self.score = 0
+	self.paused = false
 
 	return self
 end
@@ -25,6 +26,13 @@ function PlayState:lost()
 end
 
 function PlayState:update(dt)
+	if love.keyboard.wasPressed("p") then
+		self.paused = not self.paused
+	end
+	if self.paused then
+		return
+	end
+
 	self.pipe_manager.timer = self.pipe_manager.timer + dt
 
 	if PipePair.canSpawn(self.pipe_manager) then
@@ -71,6 +79,12 @@ function PlayState:update(dt)
 end
 
 function PlayState:draw()
+	if self.paused then
+		love.graphics.setFont(fonts.flappy)
+		love.graphics.printf("PAUSED", 0, WINDOW.VIRTUAL.HEIGHT / 2 - 32, WINDOW.VIRTUAL.WIDTH, "center")
+		return
+	end
+
 	for _, pipe in pairs(self.pipe_manager.pipes) do
 		pipe:draw()
 	end

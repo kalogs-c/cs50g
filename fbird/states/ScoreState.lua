@@ -24,4 +24,3 @@ function ScoreState:draw()
 
 	love.graphics.printf("Press Enter to Play Again!", 0, 160, WINDOW.VIRTUAL.WIDTH, "center")
 end
-
