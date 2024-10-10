@@ -31,24 +31,28 @@ local pipe_manager = {
   previousY = -Pipe.getHeight() + math.random(20, Pipe.getHeight() / 2),
 }
 
-gstatemachine = StateMachine.new {
-  ['title'] = TitleScreenState.new,
-  ['countdown'] = CountdownState.new,
-  ['play'] = PlayState.new,
-  ['score'] = ScoreState.new,
-}
-
-fonts = {}
 
 function love.load()
   love.graphics.setDefaultFilter('nearest', 'nearest')
   love.window.setTitle(WINDOW.TITLE)
 
-  fonts.small = love.graphics.newFont('assets/fonts/font.ttf', 8)
-  fonts.medium = love.graphics.newFont('assets/fonts/flappy.ttf', 14)
-  fonts.huge = love.graphics.newFont('assets/fonts/flappy.ttf', 56)
-  fonts.flappy = love.graphics.newFont('assets/fonts/flappy.ttf', 28)
+  fonts = {
+    small = love.graphics.newFont('assets/fonts/font.ttf', 8),
+    medium = love.graphics.newFont('assets/fonts/flappy.ttf', 14),
+    huge = love.graphics.newFont('assets/fonts/flappy.ttf', 56),
+    flappy = love.graphics.newFont('assets/fonts/flappy.ttf', 28),
+  }
   love.graphics.setFont(fonts.flappy)
+
+  sounds = {
+    jump = love.audio.newSource('assets/sounds/jump.wav', 'static'),
+    explosion = love.audio.newSource('assets/sounds/explosion.wav', 'static'),
+    hurt = love.audio.newSource('assets/sounds/hurt.wav', 'static'),
+    score = love.audio.newSource('assets/sounds/score.wav', 'static'),
+    music = love.audio.newSource('assets/sounds/music.mp3', 'static'),
+  }
+  sounds.music:setLooping(true)
+  sounds.music:play()
 
   push:setupScreen(
     WINDOW.VIRTUAL.WIDTH,
@@ -62,6 +66,12 @@ function love.load()
     }
   )
 
+  gstatemachine = StateMachine.new {
+    ['title'] = TitleScreenState.new,
+    ['countdown'] = CountdownState.new,
+    ['play'] = PlayState.new,
+    ['score'] = ScoreState.new,
+  }
   gstatemachine:change('title')
 
   love.keyboard.keysPressed = {}

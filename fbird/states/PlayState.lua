@@ -20,6 +20,12 @@ function PlayState:init()
     return self
 end
 
+function PlayState:lost()
+    gstatemachine:change('score', { score = self.score })
+    sounds.explosion:play()
+    sounds.hurt:play()
+end
+
 function PlayState:update(dt)
   self.pipe_manager.timer = self.pipe_manager.timer + dt
 
@@ -44,6 +50,7 @@ function PlayState:update(dt)
         if self.bird.x + self.bird.width > pair.x + Pipe.getWidth() then
             self.score = self.score + 1
             pair:setScored()
+            sounds.score:play()
         end
     end
 
@@ -53,13 +60,13 @@ function PlayState:update(dt)
   for _, pair in pairs(self.pipe_manager.pipes) do
     for _, pipe in pairs(pair.pipes) do
         if self.bird:collides(pipe) then
-            gstatemachine:change('score', { score = self.score })
+            self:lost()
         end
     end
   end
 
   if self.bird.y + self.bird.height > WINDOW.VIRTUAL.HEIGHT then
-    gstatemachine:change('score', { score = self.score })
+    self:lost()
   end
 
   for k, pair in pairs(self.pipe_manager.pipes) do
