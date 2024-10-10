@@ -17,6 +17,8 @@ function PipePair:init(y)
         ["lower"] = Pipe.new("bottom", self.y + Pipe.getHeight() + PIPES_GAP)
     }
 
+    self.scored = false
+
     return self
 end
 
@@ -27,6 +29,7 @@ end
 function PipePair:update(dt)
     for _, pipe in pairs(self.pipes) do
         pipe:update(dt)
+        self.x = pipe.x
     end
 end
 
@@ -42,4 +45,8 @@ end
 
 function PipePair:canDestroy()
   return self.x < -Pipe.getWidth()
+end
+
+function PipePair:setScored()
+    self.scored = true
 end
