@@ -23,7 +23,7 @@ end
 function Bird:update(dt)
   self.dy = self.dy + GRAVITY * dt
 
-  if love.keyboard.wasPressed('space') then
+  if love.keyboard.wasPressed('up') then
     self.dy = -1.25
   end
 

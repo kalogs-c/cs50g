@@ -53,13 +53,13 @@ function PlayState:update(dt)
   for _, pair in pairs(self.pipe_manager.pipes) do
     for _, pipe in pairs(pair.pipes) do
         if self.bird:collides(pipe) then
-            gstatemachine:change('title')
+            gstatemachine:change('score', { score = self.score })
         end
     end
   end
 
   if self.bird.y + self.bird.height > WINDOW.VIRTUAL.HEIGHT then
-    gstatemachine:change('title')
+    gstatemachine:change('score', { score = self.score })
   end
 
   for k, pair in pairs(self.pipe_manager.pipes) do

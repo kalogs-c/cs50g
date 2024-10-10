@@ -5,7 +5,9 @@ require 'entities.PipePair'
 require 'entities.StateMachine'
 require 'states.BaseState'
 require 'states.TitleScreenState'
+require 'states.CountdownState'
 require 'states.PlayState'
+require 'states.ScoreState'
 
 local push = require 'vendor.push'
 
@@ -29,10 +31,12 @@ local pipe_manager = {
   previousY = -Pipe.getHeight() + math.random(20, Pipe.getHeight() / 2),
 }
 
-gstatemachine = StateMachine.new({
+gstatemachine = StateMachine.new {
   ['title'] = TitleScreenState.new,
+  ['countdown'] = CountdownState.new,
   ['play'] = PlayState.new,
-})
+  ['score'] = ScoreState.new,
+}
 
 fonts = {}
 

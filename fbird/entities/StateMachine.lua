@@ -8,9 +8,9 @@ end
 
 function StateMachine:init(states)
     local empty = {
-        render = function() end,
-        update = function() end,
         enter = function() end,
+        update = function() end,
+        draw = function() end,
         exit = function() end
     }
 
