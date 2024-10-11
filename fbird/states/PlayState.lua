@@ -37,7 +37,7 @@ function PlayState:update(dt)
 
 	if PipePair.canSpawn(self.pipe_manager) then
 		local tooHighBaseCase = -Pipe.getHeight() + 40
-		local tooLowBaseCase = WINDOW.VIRTUAL.HEIGHT - PipePair.getGap() - Pipe.getHeight() - 50
+		local tooLowBaseCase = WINDOW.VIRTUAL.HEIGHT - 90 - Pipe.getHeight() - 50
 		local targetY = math.min(self.pipe_manager.previousY + math.random(-80, 80), tooLowBaseCase)
 		local y = math.max(tooHighBaseCase, targetY)
 		self.pipe_manager.previousY = y

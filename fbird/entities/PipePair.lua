@@ -1,8 +1,6 @@
 PipePair = {}
 PipePair.__index = PipePair
 
-local PIPES_GAP = 90
-
 function PipePair.new(y)
 	local pair = setmetatable({}, PipePair)
 	return pair:init(y)
@@ -12,18 +10,15 @@ function PipePair:init(y)
 	self.x = WINDOW.VIRTUAL.WIDTH
 	self.y = y
 
+	local pipes_gap = math.random(90, 120);
 	self.pipes = {
 		["upper"] = Pipe.new("top", self.y),
-		["lower"] = Pipe.new("bottom", self.y + Pipe.getHeight() + PIPES_GAP),
+		["lower"] = Pipe.new("bottom", self.y + Pipe.getHeight() + pipes_gap),
 	}
 
 	self.scored = false
 
 	return self
-end
-
-function PipePair.getGap()
-	return PIPES_GAP
 end
 
 function PipePair:update(dt)
@@ -40,7 +35,8 @@ function PipePair:draw()
 end
 
 function PipePair.canSpawn(manager)
-	return manager.timer > 2.25
+	local time_to_spawn = math.random(2, 2.5)
+	return manager.timer > time_to_spawn
 end
 
 function PipePair:canDestroy()
