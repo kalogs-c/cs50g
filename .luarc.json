@@ -1,0 +1,9 @@
+{
+    "diagnostics.disable": [
+        "duplicate-set-field"
+    ],
+    "diagnostics.globals": [
+        "vim",
+        "love"
+    ]
+}
