@@ -1,5 +1,6 @@
 local BaseState = require("states.base_state")
 local Paddle = require("entities.paddle")
+local Ball = require("entities.ball")
 
 local PlayState = BaseState.new()
 PlayState.__index = PlayState
@@ -10,8 +11,16 @@ function PlayState.new()
 end
 
 function PlayState:init()
-	self.paddle = Paddle.new()
 	self.paused = false
+
+	self.paddle = Paddle.new()
+	self.ball = Ball.new({
+		x = G.WINDOW.VIRTUAL.WIDTH / 2 - 4,
+		y = G.WINDOW.VIRTUAL.HEIGHT / 2 - 4,
+		dx = math.random(-200, 200),
+		dy = math.random(-50, -60),
+		skin = 1,
+	})
 
 	return self
 end
@@ -31,6 +40,12 @@ function PlayState:update(dt)
 	end
 
 	self.paddle:update(dt)
+	self.ball:update(dt)
+
+	if self.ball:collides(self.paddle) then
+		self.ball.dy = -self.ball.dy
+		G.SOUNDS.PADDLE_HIT:play()
+	end
 
 	if love.keyboard.wasPressed("escape") then
 		love.event.quit()
@@ -39,6 +54,7 @@ end
 
 function PlayState:draw()
 	self.paddle:draw()
+	self.ball:draw()
 
 	if self.paused then
 		love.graphics.setFont(G.FONTS.LARGE)

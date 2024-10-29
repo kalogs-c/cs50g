@@ -18,7 +18,7 @@ function quads.generate_quads(atlas, tile_width, tile_height)
 	return spritesheet
 end
 
-function quads.generate_paddles_quad(atlas)
+function quads.generate_paddles_quads(atlas)
 	local x, y = 0, 64
 
 	local counter = 1
@@ -31,7 +31,7 @@ function quads.generate_paddles_quad(atlas)
 		spritesheet[counter] = love.graphics.newQuad(x + 32, y, 64, 16, atlas:getDimensions())
 		counter = counter + 1
 
-		spritesheet[counter] = love.graphics.newQuad(x + 64, y, 96, 16, atlas:getDimensions())
+		spritesheet[counter] = love.graphics.newQuad(x + 96, y, 96, 16, atlas:getDimensions())
 		counter = counter + 1
 
 		spritesheet[counter] = love.graphics.newQuad(x, y + 16, 128, 16, atlas:getDimensions())
@@ -39,6 +39,27 @@ function quads.generate_paddles_quad(atlas)
 
 		x = 0
 		y = y + 32
+	end
+
+	return spritesheet
+end
+
+function quads.generate_balls_quads(atlas)
+	local x, y = 96, 48
+
+	local spritesheet = {}
+
+	for _ = 1, 4 do
+		table.insert(spritesheet, love.graphics.newQuad(x, y, 8, 8, atlas:getDimensions()))
+		x = x + 8
+	end
+
+	-- Return x and go to next row
+	x, y = 96, 56
+
+	for _ = 1, 3 do
+		table.insert(spritesheet, love.graphics.newQuad(x, y, 8, 8, atlas:getDimensions()))
+		x = x + 8
 	end
 
 	return spritesheet

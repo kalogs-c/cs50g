@@ -17,7 +17,7 @@ function Paddle:init()
 
 	-- Set the color of the paddle
 	-- 1 = blue, 2 = green, 3 = red, 4 = pink
-	self.skin = 1
+	self.skin = 2
 
 	-- Set the current paddle on spritesheet
 	-- 1 = small, 2 = medium, 3 = large, 4 = huge
@@ -45,7 +45,7 @@ function Paddle:update(dt)
 end
 
 function Paddle:draw()
-	love.graphics.draw(G.TEXTURES.BREAKOUT, G.FRAMES.PADDLES[self.skin * self.size], self.x, self.y)
+	love.graphics.draw(G.TEXTURES.BREAKOUT, G.FRAMES.PADDLES[self.skin + 4 * (self.size - 1)], self.x, self.y)
 end
 
 return Paddle

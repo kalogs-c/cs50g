@@ -30,7 +30,8 @@ G.TEXTURES = {
 }
 
 G.FRAMES = {
-	PADDLES = quads.generate_paddles_quad(G.TEXTURES.BREAKOUT),
+	PADDLES = quads.generate_paddles_quads(G.TEXTURES.BREAKOUT),
+	BALLS = quads.generate_balls_quads(G.TEXTURES.BREAKOUT),
 }
 
 G.SOUNDS = {
