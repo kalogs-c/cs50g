@@ -1,6 +1,7 @@
 local BaseState = require("states.base_state")
 local Paddle = require("entities.paddle")
 local Ball = require("entities.ball")
+local level_maker = require("level_maker")
 
 local PlayState = BaseState.new()
 PlayState.__index = PlayState
@@ -21,6 +22,8 @@ function PlayState:init()
 		dy = math.random(-50, -60),
 		skin = 1,
 	})
+
+	self.bricks = level_maker.create_bricks()
 
 	return self
 end
@@ -47,12 +50,22 @@ function PlayState:update(dt)
 		G.SOUNDS.PADDLE_HIT:play()
 	end
 
+	for _, brick in pairs(self.bricks) do
+		if brick.in_scene and self.ball:collides(brick) then
+			brick:hit()
+		end
+	end
+
 	if love.keyboard.wasPressed("escape") then
 		love.event.quit()
 	end
 end
 
 function PlayState:draw()
+	for _, brick in pairs(self.bricks) do
+		brick:draw()
+	end
+
 	self.paddle:draw()
 	self.ball:draw()
 

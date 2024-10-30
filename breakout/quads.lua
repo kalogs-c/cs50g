@@ -2,7 +2,7 @@ local quads = {}
 
 function quads.generate_quads(atlas, tile_width, tile_height)
 	local sheet_width = atlas:getWidth() / tile_width
-	local sheet_height = atlas:getHeigth() / tile_height
+	local sheet_height = atlas:getHeight() / tile_height
 
 	local spritesheet = {}
 
@@ -63,6 +63,17 @@ function quads.generate_balls_quads(atlas)
 	end
 
 	return spritesheet
+end
+
+function quads.generate_bricks_quads(atlas)
+	local all_quads = quads.generate_quads(atlas, 32, 16)
+
+	local bricks = {}
+	for i = 1, 21 do
+		bricks[i] = all_quads[i]
+	end
+
+	return bricks
 end
 
 return quads
