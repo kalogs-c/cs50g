@@ -19,9 +19,9 @@ local level_maker = {
 function level_maker.create_bricks(level)
 	local bricks = {}
 
-	local rows = math.random(2, 5)
+	local rows = math.random(1)
 
-	local random_columns = math.random(7, 13)
+	local random_columns = math.random(1)
 	local columns = random_columns % 2 == 0 and random_columns + 1 or random_columns
 
 	local highest_tier = math.min(3, math.floor(level / 5))

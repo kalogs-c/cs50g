@@ -38,6 +38,7 @@ function StartState:update(dt)
 				bricks = level_maker.create_bricks(1),
 				health = 3,
 				score = 0,
+				level = 1,
 			})
 		end
 	end

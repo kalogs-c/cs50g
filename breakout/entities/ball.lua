@@ -68,4 +68,9 @@ function Ball:reset()
 	self.dy = 0
 end
 
+function Ball:followPaddle(paddle)
+	self.x = paddle.x + (paddle.width / 2) - self.width / 2
+	self.y = paddle.y - self.height
+end
+
 return Ball

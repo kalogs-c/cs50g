@@ -20,4 +20,10 @@ function drawer.draw_health(health)
 	end
 end
 
+function drawer.draw_level(level)
+	love.graphics.setFont(G.FONTS.SMALL)
+	love.graphics.print("Level: ", G.WINDOW.VIRTUAL.WIDTH - 60, 20)
+	love.graphics.printf(tostring(level), G.WINDOW.VIRTUAL.WIDTH - 50, 20, 40, "right")
+end
+
 return drawer

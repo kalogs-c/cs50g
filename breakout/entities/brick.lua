@@ -70,7 +70,6 @@ function Brick:hit()
 		self.tier = self.tier - 1
 	elseif self.color > 1 then
 		self.color = self.color - 1
-		self.tier = 4
 	else
 		G.SOUNDS.BRICK_HIT1:stop()
 		G.SOUNDS.BRICK_HIT1:play()

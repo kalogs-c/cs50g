@@ -12,6 +12,7 @@ end
 function PlayState:init(ctx)
 	self.paused = false
 
+	self.level = ctx.level
 	self.paddle = ctx.paddle
 	self.ball = ctx.ball
 	self.bricks = ctx.bricks
@@ -117,6 +118,17 @@ function PlayState:update(dt)
 		brick:update(dt)
 	end
 
+	if self:checkVictory() then
+		G.SOUNDS.VICTORY:play()
+		G.StateMachine:change("victory", {
+			score = self.score,
+			paddle = self.paddle,
+			ball = self.ball,
+			health = self.health,
+			level = self.level,
+		})
+	end
+
 	if love.keyboard.wasPressed("escape") then
 		love.event.quit()
 	end
@@ -136,11 +148,22 @@ function PlayState:draw()
 
 	drawer.draw_score(self.score)
 	drawer.draw_health(self.health)
+	drawer.draw_level(self.level)
 
 	if self.paused then
 		love.graphics.setFont(G.FONTS.LARGE)
 		love.graphics.printf("PAUSED", 0, G.WINDOW.VIRTUAL.HEIGHT / 2 - 16, G.WINDOW.VIRTUAL.WIDTH, "center")
 	end
+end
+
+function PlayState:checkVictory()
+	for _, brick in pairs(self.bricks) do
+		if brick.in_scene then
+			return false
+		end
+	end
+
+	return true
 end
 
 return PlayState

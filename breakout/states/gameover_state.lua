@@ -4,8 +4,8 @@ local GameOverState = BaseState.new()
 GameOverState.__index = GameOverState
 
 function GameOverState.new(context)
-	local ss = setmetatable({}, GameOverState)
-	return ss:init(context)
+	local gos = setmetatable({}, GameOverState)
+	return gos:init(context)
 end
 
 function GameOverState:init(ctx)

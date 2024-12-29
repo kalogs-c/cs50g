@@ -15,6 +15,7 @@ function ServeState:init(ctx)
 	self.bricks = ctx.bricks
 	self.health = ctx.health
 	self.score = ctx.score
+	self.level = ctx.level
 
 	self.ball = Ball.new({
 		x = G.WINDOW.VIRTUAL.WIDTH / 2 - 4,
@@ -29,8 +30,7 @@ end
 
 function ServeState:update(dt)
 	self.paddle:update(dt)
-	self.ball.x = self.paddle.x + (self.paddle.width / 2) - self.ball.width / 2
-	self.ball.y = self.paddle.y - self.ball.height
+	self.ball:followPaddle(self.paddle)
 
 	if love.keyboard.wasPressed("space") or love.keyboard.wasPressed("return") then
 		G.StateMachine:change("play", {
@@ -39,6 +39,7 @@ function ServeState:update(dt)
 			bricks = self.bricks,
 			health = self.health,
 			score = self.score,
+			level = self.level,
 		})
 	end
 
@@ -57,6 +58,7 @@ function ServeState:draw()
 
 	drawer.draw_score(self.score)
 	drawer.draw_health(self.health)
+	drawer.draw_level(self.level)
 
 	love.graphics.setFont(G.FONTS.MEDIUM)
 	love.graphics.printf("Press Enter to serve", 0, G.WINDOW.VIRTUAL.HEIGHT / 2 - 16, G.WINDOW.VIRTUAL.WIDTH, "center")
