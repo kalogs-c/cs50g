@@ -42,7 +42,11 @@ function PlayState:update(dt)
 	self.ball:update(dt)
 
 	if self.ball:collides(self.paddle) then
-		self.ball.dy = -self.ball.dy
+		-- Reverse dy only if hits top half of paddle
+		if self.ball.y + self.ball.height < self.paddle.y + self.paddle.height / 2 + 10 then
+			self.ball.dy = -math.abs(self.ball.dy)
+			self.ball.y = self.ball.y - 2
+		end
 
 		if self.ball.x < self.paddle.x + self.paddle.width / 2 and self.paddle.dx < 0 then
 			self.ball.dx = -50 + -(8 * (self.paddle.x + self.paddle.width / 2 - self.ball.x))

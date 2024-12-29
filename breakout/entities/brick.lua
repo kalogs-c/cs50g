@@ -22,8 +22,18 @@ function Brick:init(x, y)
 end
 
 function Brick:hit()
+	G.SOUNDS.BRICK_HIT2:stop()
 	G.SOUNDS.BRICK_HIT2:play()
-	self.in_scene = false
+
+	if self.tier > 1 then
+		self.tier = self.tier - 1
+	elseif self.color > 1 then
+		self.color = self.color - 1
+	else
+		G.SOUNDS.BRICK_HIT1:stop()
+		G.SOUNDS.BRICK_HIT1:play()
+		self.in_scene = false
+	end
 end
 
 function Brick:draw()
