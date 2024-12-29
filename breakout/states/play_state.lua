@@ -43,7 +43,7 @@ function PlayState:update(dt)
 
 	if self.ball:collides(self.paddle) then
 		-- Reverse dy only if hits top half of paddle
-		if self.ball.y + self.ball.height < self.paddle.y + self.paddle.height / 2 + 10 then
+		if self.ball.y + self.ball.height < self.paddle.y + self.paddle.height / 2 + 2.5 then
 			self.ball.dy = -math.abs(self.ball.dy)
 			self.ball.y = self.ball.y - 2
 		end
@@ -60,7 +60,7 @@ function PlayState:update(dt)
 	for _, brick in pairs(self.bricks) do
 		if brick.in_scene and self.ball:collides(brick) then
 			brick:hit()
-			self.score = self.score + 10
+			self.score = self.score + brick.tier * 200 + brick.color * 25
 
 			-- Determine collision side by calculating overlap
 			local ball_left, ball_right = self.ball.x, self.ball.x + self.ball.width
@@ -113,6 +113,10 @@ function PlayState:update(dt)
 		end
 	end
 
+	for _, brick in pairs(self.bricks) do
+		brick:update(dt)
+	end
+
 	if love.keyboard.wasPressed("escape") then
 		love.event.quit()
 	end
@@ -121,6 +125,10 @@ end
 function PlayState:draw()
 	for _, brick in pairs(self.bricks) do
 		brick:draw()
+	end
+
+	for _, brick in pairs(self.bricks) do
+		brick:drawParticles()
 	end
 
 	self.paddle:draw()

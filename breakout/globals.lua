@@ -28,7 +28,7 @@ G.TEXTURES = {
 	BREAKOUT = love.graphics.newImage("assets/graphics/breakout.png"),
 	ARROWS = love.graphics.newImage("assets/graphics/arrows.png"),
 	HEARTS = love.graphics.newImage("assets/graphics/hearts.png"),
-	PARTICLE = love.graphics.newImage("assets/graphics/particle.png"),
+	PARTICLES = love.graphics.newImage("assets/graphics/particle.png"),
 }
 
 G.FRAMES = {
