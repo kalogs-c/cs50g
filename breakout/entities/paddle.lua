@@ -1,12 +1,12 @@
 Paddle = {}
 Paddle.__index = Paddle
 
-function Paddle.new()
+function Paddle.new(skin)
 	local paddle = setmetatable({}, Paddle)
-	return paddle:init()
+	return paddle:init(skin)
 end
 
-function Paddle:init()
+function Paddle:init(skin)
 	self.x = G.WINDOW.VIRTUAL.WIDTH / 2 - 32
 	self.y = G.WINDOW.VIRTUAL.HEIGHT - 32
 
@@ -17,7 +17,7 @@ function Paddle:init()
 
 	-- Set the color of the paddle
 	-- 1 = blue, 2 = green, 3 = red, 4 = pink
-	self.skin = 2
+	self.skin = skin
 
 	-- Set the current paddle on spritesheet
 	-- 1 = small, 2 = medium, 3 = large, 4 = huge
@@ -45,7 +45,7 @@ function Paddle:update(dt)
 end
 
 function Paddle:draw()
-	love.graphics.draw(G.TEXTURES.BREAKOUT, G.FRAMES.PADDLES[self.skin + 4 * (self.size - 1)], self.x, self.y)
+	love.graphics.draw(G.TEXTURES.BREAKOUT, G.FRAMES.PADDLES[self.size + 4 * (self.skin - 1)], self.x, self.y)
 end
 
 return Paddle

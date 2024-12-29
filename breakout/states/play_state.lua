@@ -1,29 +1,25 @@
 local BaseState = require("states.base_state")
-local Paddle = require("entities.paddle")
-local Ball = require("entities.ball")
-local level_maker = require("level_maker")
+local drawer = require("drawer")
 
 local PlayState = BaseState.new()
 PlayState.__index = PlayState
 
-function PlayState.new()
+function PlayState.new(context)
 	local ps = setmetatable({}, PlayState)
-	return ps:init()
+	return ps:init(context)
 end
 
-function PlayState:init()
+function PlayState:init(ctx)
 	self.paused = false
 
-	self.paddle = Paddle.new()
-	self.ball = Ball.new({
-		x = G.WINDOW.VIRTUAL.WIDTH / 2 - 4,
-		y = G.WINDOW.VIRTUAL.HEIGHT / 2 - 4,
-		dx = math.random(-200, 200),
-		dy = math.random(-50, -60),
-		skin = 1,
-	})
+	self.paddle = ctx.paddle
+	self.ball = ctx.ball
+	self.bricks = ctx.bricks
+	self.health = ctx.health
+	self.score = ctx.score
 
-	self.bricks = level_maker.create_bricks()
+	self.ball.dx = math.random(-200, 200)
+	self.ball.dy = math.random(-50, -60)
 
 	return self
 end
@@ -46,7 +42,6 @@ function PlayState:update(dt)
 	self.ball:update(dt)
 
 	if self.ball:collides(self.paddle) then
-		self.ball.y = self.paddle.y - self.ball.height
 		self.ball.dy = -self.ball.dy
 
 		if self.ball.x < self.paddle.x + self.paddle.width / 2 and self.paddle.dx < 0 then
@@ -61,26 +56,33 @@ function PlayState:update(dt)
 	for _, brick in pairs(self.bricks) do
 		if brick.in_scene and self.ball:collides(brick) then
 			brick:hit()
+			self.score = self.score + 10
 
-			-- Left corner collision
-			if self.ball.x + 2 < brick.x and self.ball.dx > 0 then
-				self.ball.dx = -self.ball.dx
-				self.ball.x = brick.x - self.ball.height
+			-- Determine collision side by calculating overlap
+			local ball_left, ball_right = self.ball.x, self.ball.x + self.ball.width
+			local ball_top, ball_bottom = self.ball.y, self.ball.y + self.ball.height
+			local brick_left, brick_right = brick.x, brick.x + brick.width
+			local brick_top, brick_bottom = brick.y, brick.y + brick.height
 
-			-- Right corner collision
-			elseif self.ball.x + 5 < brick.x + brick.width and self.ball.dx < 0 then
-				self.ball.dx = -self.ball.dx
-				self.ball.x = brick.x + brick.width
+			local overlap_left = ball_right - brick_left
+			local overlap_right = brick_right - ball_left
+			local overlap_top = ball_bottom - brick_top
+			local overlap_bottom = brick_bottom - ball_top
 
-			-- Top collision
-			elseif self.ball.y < brick.y then
-				self.ball.dy = -self.ball.dy
-				self.ball.y = brick.y - self.ball.height
+			local min_overlap = math.min(overlap_left, overlap_right, overlap_top, overlap_bottom)
 
-			-- Bottom collision
-			else
-				self.ball.dy = -self.ball.dy
-				self.ball.y = brick.y + brick.height
+			if min_overlap == overlap_left then
+				self.ball.dx = -math.abs(self.ball.dx)
+				self.ball.x = brick_left - self.ball.width
+			elseif min_overlap == overlap_right then
+				self.ball.dx = math.abs(self.ball.dx)
+				self.ball.x = brick_right
+			elseif min_overlap == overlap_top then
+				self.ball.dy = -math.abs(self.ball.dy)
+				self.ball.y = brick_top - self.ball.height
+			elseif min_overlap == overlap_bottom then
+				self.ball.dy = math.abs(self.ball.dy)
+				self.ball.y = brick_bottom
 			end
 
 			-- Slowly increase game speed
@@ -88,6 +90,22 @@ function PlayState:update(dt)
 
 			-- Prevent colliding with more than one brick
 			break
+		end
+	end
+
+	if self.ball.y >= G.WINDOW.VIRTUAL.HEIGHT then
+		self.health = self.health - 1
+		G.SOUNDS.HURT:play()
+
+		if self.health == 0 then
+			G.StateMachine:change("gameover", { score = self.score })
+		else
+			G.StateMachine:change("serve", {
+				paddle = self.paddle,
+				bricks = self.bricks,
+				health = self.health,
+				score = self.score,
+			})
 		end
 	end
 
@@ -103,6 +121,9 @@ function PlayState:draw()
 
 	self.paddle:draw()
 	self.ball:draw()
+
+	drawer.draw_score(self.score)
+	drawer.draw_health(self.health)
 
 	if self.paused then
 		love.graphics.setFont(G.FONTS.LARGE)
