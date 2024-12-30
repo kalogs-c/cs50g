@@ -110,6 +110,7 @@ function PlayState:update(dt)
 				bricks = self.bricks,
 				health = self.health,
 				score = self.score,
+				level = self.level,
 			})
 		end
 	end

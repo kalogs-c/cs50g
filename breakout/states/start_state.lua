@@ -5,14 +5,15 @@ local Paddle = require("entities.paddle")
 local StartState = BaseState.new()
 StartState.__index = StartState
 
-function StartState.new()
+function StartState.new(context)
 	local ss = setmetatable({}, StartState)
-	return ss:init()
+	return ss:init(context)
 end
 
-function StartState:init()
+function StartState:init(ctx)
 	self.menu_options = { "START", "HIGH SCORES" }
 	self.highlighted = 1
+	self.highscores = ctx.highscores
 
 	return self
 end
@@ -39,6 +40,10 @@ function StartState:update(dt)
 				health = 3,
 				score = 0,
 				level = 1,
+			})
+		elseif self.highlighted == 2 then
+			G.StateMachine:change("highscores", {
+				highscores = self.highscores,
 			})
 		end
 	end

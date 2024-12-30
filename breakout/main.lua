@@ -1,11 +1,14 @@
 require("globals")
 local setup = require("setup")
 local push = require("vendor.push")
+local save_manager = require("save_manager")
 
 function love.load()
 	math.randomseed(os.time())
 	love.keyboard.keysPressed = {}
-	G.StateMachine:change("start")
+	G.StateMachine:change("start", {
+		highscores = save_manager.load_highscores(),
+	})
 	love.graphics.setFont(G.FONTS.SMALL)
 	setup.screen()
 end
