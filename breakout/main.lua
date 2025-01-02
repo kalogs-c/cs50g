@@ -9,6 +9,8 @@ function love.load()
 	G.StateMachine:change("start", {
 		highscores = save_manager.load_highscores(),
 	})
+	G.SOUNDS.MUSIC:play()
+	G.SOUNDS.MUSIC:setLooping(true)
 	love.graphics.setFont(G.FONTS.SMALL)
 	setup.screen()
 end

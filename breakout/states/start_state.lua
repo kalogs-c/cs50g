@@ -1,6 +1,4 @@
 local BaseState = require("states.base_state")
-local level_maker = require("level_maker")
-local Paddle = require("entities.paddle")
 
 local StartState = BaseState.new()
 StartState.__index = StartState
@@ -34,12 +32,7 @@ function StartState:update(dt)
 		G.SOUNDS.CONFIRM:play()
 
 		if self.highlighted == 1 then
-			G.StateMachine:change("serve", {
-				paddle = Paddle.new(1),
-				bricks = level_maker.create_bricks(1),
-				health = 3,
-				score = 0,
-				level = 1,
+			G.StateMachine:change("select_paddle", {
 				highscores = self.highscores,
 			})
 		elseif self.highlighted == 2 then

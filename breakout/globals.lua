@@ -1,5 +1,6 @@
 local StateMachine = require("state_machine")
 local StartState = require("states.start_state")
+local SelectPaddleState = require("states.paddle_select_state")
 local ServeState = require("states.serve_state")
 local PlayState = require("states.play_state")
 local HighscoreState = require("states.highscore_state")
@@ -37,6 +38,7 @@ G.TEXTURES = {
 G.FRAMES = {
 	PADDLES = quads.generate_paddles_quads(G.TEXTURES.BREAKOUT),
 	BALLS = quads.generate_balls_quads(G.TEXTURES.BREAKOUT),
+	ARROWS = quads.generate_quads(G.TEXTURES.ARROWS, 24, 24),
 	BRICKS = quads.generate_bricks_quads(G.TEXTURES.BREAKOUT),
 	HEARTS = quads.generate_quads(G.TEXTURES.HEARTS, 10, 9),
 }
@@ -64,6 +66,7 @@ G.CONSTANTS = {
 
 G.StateMachine = StateMachine.new({
 	["start"] = StartState.new,
+	["select_paddle"] = SelectPaddleState.new,
 	["serve"] = ServeState.new,
 	["play"] = PlayState.new,
 	["gameover"] = GameOverState.new,

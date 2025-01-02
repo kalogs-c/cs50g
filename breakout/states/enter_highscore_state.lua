@@ -22,12 +22,12 @@ function EnterHighscoreState:update(dt)
 	local char_selected = self.chars[self.highlighted]
 
 	if love.keyboard.wasPressed("up") then
-		G.SOUNDS.PADDLE_HIT:play()
+		G.SOUNDS.SELECT:play()
 		self.chars[self.highlighted] = char_selected + 1
 	end
 
 	if love.keyboard.wasPressed("down") then
-		G.SOUNDS.PADDLE_HIT:play()
+		G.SOUNDS.SELECT:play()
 		self.chars[self.highlighted] = char_selected - 1
 	end
 
