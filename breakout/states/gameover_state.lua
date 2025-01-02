@@ -10,13 +10,36 @@ end
 
 function GameOverState:init(ctx)
 	self.score = ctx.score
+	self.highscores = ctx.highscores
 
 	return self
 end
 
 function GameOverState:update(dt)
 	if love.keyboard.wasPressed("enter") or love.keyboard.wasPressed("return") then
-		G.StateMachine:change("start")
+		local highscore = false
+		local score_index = 11
+
+		for i = 10, 1, -1 do
+			local score = self.highscores[i].score or 0
+			if self.score > score then
+				score_index = i
+				highscore = true
+			end
+		end
+
+		if highscore then
+			G.SOUNDS.HIGH_SCORE:play()
+			G.StateMachine:change("enter_highscore", {
+				highscores = self.highscores,
+				score = self.score,
+				score_index = score_index,
+			})
+		else
+			G.StateMachine:change("start", {
+				highscores = self.highscores,
+			})
+		end
 	end
 
 	if love.keyboard.wasPressed("escape") then

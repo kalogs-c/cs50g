@@ -16,6 +16,7 @@ function VictoryState:init(ctx)
 	self.ball = ctx.ball
 	self.health = ctx.health
 	self.level = ctx.level
+	self.highscores = ctx.highscores
 
 	return self
 end
@@ -32,6 +33,7 @@ function VictoryState:update(dt)
 			paddle = self.paddle,
 			health = self.health,
 			score = self.score,
+			highscores = self.highscores,
 		})
 	end
 

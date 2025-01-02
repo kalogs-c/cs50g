@@ -18,6 +18,7 @@ function PlayState:init(ctx)
 	self.bricks = ctx.bricks
 	self.health = ctx.health
 	self.score = ctx.score
+	self.highscores = ctx.highscores
 
 	self.ball.dx = math.random(-200, 200)
 	self.ball.dy = math.random(-50, -60)
@@ -103,7 +104,10 @@ function PlayState:update(dt)
 		G.SOUNDS.HURT:play()
 
 		if self.health == 0 then
-			G.StateMachine:change("gameover", { score = self.score })
+			G.StateMachine:change("gameover", {
+				score = self.score,
+				highscores = self.highscores,
+			})
 		else
 			G.StateMachine:change("serve", {
 				paddle = self.paddle,
@@ -111,6 +115,7 @@ function PlayState:update(dt)
 				health = self.health,
 				score = self.score,
 				level = self.level,
+				highscores = self.highscores,
 			})
 		end
 	end
@@ -127,6 +132,7 @@ function PlayState:update(dt)
 			ball = self.ball,
 			health = self.health,
 			level = self.level,
+			highscores = self.highscores,
 		})
 	end
 

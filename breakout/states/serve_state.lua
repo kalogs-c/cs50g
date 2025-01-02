@@ -16,6 +16,7 @@ function ServeState:init(ctx)
 	self.health = ctx.health
 	self.score = ctx.score
 	self.level = ctx.level
+	self.highscores = ctx.highscores
 
 	self.ball = Ball.new({
 		x = G.WINDOW.VIRTUAL.WIDTH / 2 - 4,
@@ -40,6 +41,7 @@ function ServeState:update(dt)
 			health = self.health,
 			score = self.score,
 			level = self.level,
+			highscores = self.highscores,
 		})
 	end
 

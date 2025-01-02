@@ -40,6 +40,7 @@ function StartState:update(dt)
 				health = 3,
 				score = 0,
 				level = 1,
+				highscores = self.highscores,
 			})
 		elseif self.highlighted == 2 then
 			G.StateMachine:change("highscores", {

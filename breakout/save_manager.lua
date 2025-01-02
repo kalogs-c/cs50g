@@ -17,8 +17,8 @@ function save_manager.load_highscores()
 	for line in love.filesystem.lines("breakout.lst") do
 		local curr_score = stringsplit(line, "\t")
 		table.insert(scores, {
-			name = curr_score[1],
-			score = curr_score[2],
+			name = string.sub(curr_score[1], 1, 3),
+			score = tonumber(curr_score[2]),
 		})
 	end
 

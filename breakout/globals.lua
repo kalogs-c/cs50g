@@ -3,6 +3,7 @@ local StartState = require("states.start_state")
 local ServeState = require("states.serve_state")
 local PlayState = require("states.play_state")
 local HighscoreState = require("states.highscore_state")
+local EnterHighscoreState = require("states.enter_highscore_state")
 local VictoryState = require("states.victory_state")
 local GameOverState = require("states.gameover_state")
 local quads = require("quads")
@@ -68,4 +69,5 @@ G.StateMachine = StateMachine.new({
 	["gameover"] = GameOverState.new,
 	["victory"] = VictoryState.new,
 	["highscores"] = HighscoreState.new,
+	["enter_highscore"] = EnterHighscoreState.new,
 })
